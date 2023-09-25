@@ -1,0 +1,66 @@
+﻿@page "/"
+@using Common.Interfaces
+@using Common.Models
+@using Common.Enums
+@inject HttpClient Http
+@inject ICar data;
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>RegNo</th>
+            <th>Make</th>
+            <th>Odometer</th>
+            <th>Cost Km</th>
+            <th>Vehicle Type</th>
+            <th>Cost Day</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var car in vehicleList)
+        {
+            <tr>
+                <td>@car.RegNo</td>
+                <td>@car.Make</td>
+                <td>@car.Odometer</td>
+                <td>@car.CostKm</td>
+                <td>@car.VehicleType</td>
+                <td>@car.CostDay</td>
+                <td>@car.VehicleStatus</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    private List<Vehicle> vehicleList = new List<Vehicle>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var inputData = await Http.GetStringAsync("sample-data/VehicleData.csv");
+        var data = inputData.Split(";");
+        data = data.Select(row => row.Replace("\r\n", string.Empty)).ToArray();
+
+        foreach (var line in data.Skip(1))
+        {
+            if (!string.IsNullOrEmpty(line))
+            {
+                var vehicleData = line.Split(",");
+                vehicleList.Add(new Vehicle
+                    {
+                        RegNo = vehicleData[0],
+                        Make = vehicleData[1],
+                        Odometer = Int32.Parse(vehicleData[2]),
+                        CostKm = Int32.Parse(vehicleData[3]),
+                        VehicleType = (Common.Enums.VehicleType)Int32.Parse(vehicleData[4]),
+                        CostDay = Int32.Parse(vehicleData[5]),
+                        VehicleStatus = (Common.Enums.VehicleStatus)Int32.Parse(vehicleData[6]),
+                    });
+            }
+        }
+    }
+}
