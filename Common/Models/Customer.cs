@@ -18,7 +18,6 @@ namespace Common.Models
         public List<Customer> GetCustomers()
         {
             List<Customer> list = new List<Customer>();
-            list.Add(new Customer { Fname = "Göran", Lname = "Karlsson", Ssn = "1234554"});
             return list;
         }
     }

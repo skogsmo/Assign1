@@ -1,2 +1,5 @@
 ﻿RegNo,Make,Odometer,CostKm,VehicleType,CostDay,VehicleStatus;
-ABC123,Volvo,1000,5,1,500,0;
+ABC123,Volvo,1000,5,1,500,1;
+FCZ154,Audi,2000,10,0,750,1;
+QPS109,Ducati,4500,14,3,1000,0;
+DRS001,Wolkswagen,275000,4,2,125,0

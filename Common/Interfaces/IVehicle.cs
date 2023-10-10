@@ -2,7 +2,7 @@
 
 namespace Common.Interfaces
 {
-    public interface ICar
+    public interface IVehicle
     {
         List<Vehicle> GetVehicles();
     }

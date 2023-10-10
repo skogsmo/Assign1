@@ -2,12 +2,14 @@
 @using Common.Interfaces
 @using Common.Models
 @using Common.Enums
-@inject HttpClient Http
-@inject ICar data;
+@using Business.Classes
+@using Data.Interfaces
+@inject BookingProcessor bp;
 
-
-
-<table class="table">
+<PageTitle>Car Rental Assignment - G</PageTitle>
+<h1>Car Rental Assignment - G</h1>
+<h4>Cars</h4>
+<table class="table table-bordered">
     <thead>
         <tr>
             <th>RegNo</th>
@@ -20,7 +22,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var car in vehicleList)
+        @foreach (var car in bp.GetVehicles())
         {
             <tr>
                 <td>@car.RegNo</td>
@@ -29,38 +31,88 @@
                 <td>@car.CostKm</td>
                 <td>@car.VehicleType</td>
                 <td>@car.CostDay</td>
-                <td>@car.VehicleStatus</td>
+                @if (car.VehicleStatus.Equals(VehicleStatus.Available) || car.VehicleStatus.Equals(VehicleStatus.Closed))
+                {
+                    <td><div class="badge bg-success text-wrap" style="width: 6rem">@car.VehicleStatus</div></td>
+                }
+                else
+                {
+                    <td><div class="badge bg-danger text-wrap" style="width: 6rem">@car.VehicleStatus</div></td>
+                }
             </tr>
         }
     </tbody>
 </table>
 
-
-@code {
-    private List<Vehicle> vehicleList = new List<Vehicle>();
-
-    protected override async Task OnInitializedAsync()
-    {
-        var inputData = await Http.GetStringAsync("sample-data/VehicleData.csv");
-        var data = inputData.Split(";");
-        data = data.Select(row => row.Replace("\r\n", string.Empty)).ToArray();
-
-        foreach (var line in data.Skip(1))
+<h4>Bookings</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Car</th>
+            <th>Customer</th>
+            <th>KmRented</th>
+            <th>KmReturned</th>
+            <th>Rented</th>
+            <th>Returned</th>
+            <th>Cost</th>
+            <th>VehicleStatus</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in bp.GetBookings())
         {
-            if (!string.IsNullOrEmpty(line))
-            {
-                var vehicleData = line.Split(",");
-                vehicleList.Add(new Vehicle
-                    {
-                        RegNo = vehicleData[0],
-                        Make = vehicleData[1],
-                        Odometer = Int32.Parse(vehicleData[2]),
-                        CostKm = Int32.Parse(vehicleData[3]),
-                        VehicleType = (Common.Enums.VehicleType)Int32.Parse(vehicleData[4]),
-                        CostDay = Int32.Parse(vehicleData[5]),
-                        VehicleStatus = (Common.Enums.VehicleStatus)Int32.Parse(vehicleData[6]),
-                    });
-            }
+            <tr>
+                <td>@book.Car.RegNo, @book.Car.Make</td>
+                <td>@book.Customer.Fname, @book.Customer.Lname</td>
+                <td>@book.Kmrented</td>
+                @if (book.Kmreturned == 0)
+                {
+                    <td>@book.Kmreturned.ToString(" ")</td>
+                }
+                else
+                {
+                    <td>@book.Kmreturned</td>
+                }
+                <td>@book.Rented</td>
+                <td>@book.Returned</td>
+                @if (book.Cost == 0)
+                {
+                    <td>@book.Kmreturned.ToString(" ")</td>
+                }
+                else
+                {
+                    <td>@book.Cost</td>
+                }
+                @if (book.VehicleStatus.Equals(VehicleStatus.Available) || book.VehicleStatus.Equals(VehicleStatus.Closed))
+                {
+                    <td><div class="badge bg-success text-wrap" style="width: 6rem">@book.VehicleStatus</div></td>
+                }
+                else
+                {
+                    <td><div class="badge bg-danger text-wrap" style="width: 6rem">@book.VehicleStatus</div></td>
+                }
+            </tr>
         }
-    }
-}
+    </tbody>
+</table>
+
+<h4>Customers</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Ssn</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in bp.GetCustomers())
+        {
+            <tr>
+                <td>@customer.Fname</td>
+                <td>@customer.Lname</td>
+                <td>@customer.Ssn</td>
+            </tr>
+        }
+    </tbody>
+</table>
