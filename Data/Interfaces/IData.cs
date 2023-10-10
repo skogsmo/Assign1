@@ -5,7 +5,7 @@ namespace Data.Interfaces
 {
     public interface IData : IVehicle, ICustomer, IBooking
     {
-        List<Vehicle> GetVehicles();
+        List<IVehicle> GetVehicles();
         List<Customer> GetCustomers();
         List<Booking> GetBookings();
     }

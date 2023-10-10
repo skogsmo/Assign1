@@ -1,9 +1,9 @@
 ﻿using Common.Enums;
-using Common.Models;
+using Common.Interfaces;
 
-namespace Common.Interfaces
+namespace Common.Models
 {
-    public interface IVehicle
+    public class Motorcycle : IVehicle
     {
         public string RegNo { get; set; }
         public string Make { get; set; }
@@ -13,6 +13,10 @@ namespace Common.Interfaces
         public int CostDay { get; set; }
         public VehicleStatus VehicleStatus { get; set; }
 
-        List<IVehicle> GetVehicles();
+        public List<IVehicle> GetVehicles()
+        {
+            List<IVehicle> list = new List<IVehicle>();
+            return list;
+        }
     }
 }

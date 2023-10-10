@@ -1,12 +1,12 @@
 ﻿using Common.Enums;
 using Common.Interfaces;
-using System.Numerics;
 
 namespace Common.Models
 {
     public class Booking : IBooking
     {
-        public Vehicle Car { get; set; }
+        public Car Car { get; set; }
+        public Motorcycle Motorcycle { get; set; }
         public Customer Customer { get; set; }
         public int Kmrented { get; set; }
         public int Kmreturned { get; set; }

@@ -11,7 +11,7 @@ namespace Business.Classes
         public BookingProcessor(IData db) => _db = db;
 
         public List<Customer> GetCustomers() => _db.GetCustomers();
-        public List<Vehicle> GetVehicles() => _db.GetVehicles();
+        public List<IVehicle> GetVehicles() => _db.GetVehicles();
         public List<Booking> GetBookings() => _db.GetBookings();
 
     }
