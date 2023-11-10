@@ -7,7 +7,7 @@ namespace Common.Interfaces
         public string Fname { get; set; }
         public string Lname { get; set; }
         public string Ssn { get; set; }
+        public int Id { get; set; }
 
-        List<Customer> GetCustomers();
     }
 }

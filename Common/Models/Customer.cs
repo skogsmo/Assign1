@@ -7,6 +7,7 @@ namespace Common.Models
         public string Fname { get; set; }
         public string Lname { get; set; }
         public string Ssn { get; set; }
+        public int Id { get; set; }
 
         //public Customer(string fName, string lName, string ssn)
         //{
@@ -19,6 +20,11 @@ namespace Common.Models
         {
             List<Customer> list = new List<Customer>();
             return list;
+        }
+
+        public string GetName()
+        {
+            return Fname + Lname;
         }
     }
 }

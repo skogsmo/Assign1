@@ -1,5 +1,4 @@
 ﻿using Common.Enums;
-using Common.Models;
 
 namespace Common.Interfaces
 {
@@ -12,7 +11,7 @@ namespace Common.Interfaces
         public VehicleType VehicleType { get; set; }
         public int CostDay { get; set; }
         public VehicleStatus VehicleStatus { get; set; }
+        public int Id { get; set; }
 
-        List<IVehicle> GetVehicles();
     }
 }

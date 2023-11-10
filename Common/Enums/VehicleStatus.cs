@@ -4,7 +4,5 @@
     {
         Available,
         Booked,
-        Open,
-        Closed
     }
 }

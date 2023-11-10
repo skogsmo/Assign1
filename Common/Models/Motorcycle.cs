@@ -3,7 +3,7 @@ using Common.Interfaces;
 
 namespace Common.Models
 {
-    public class Motorcycle : IVehicle
+    public class Motorcycle : Vehicle
     {
         public string RegNo { get; set; }
         public string Make { get; set; }
@@ -13,10 +13,9 @@ namespace Common.Models
         public int CostDay { get; set; }
         public VehicleStatus VehicleStatus { get; set; }
 
-        public List<IVehicle> GetVehicles()
+        public List<Vehicle> GetVehicles()
         {
-            List<IVehicle> list = new List<IVehicle>();
-            return list;
+            return new List<Vehicle>();
         }
     }
 }

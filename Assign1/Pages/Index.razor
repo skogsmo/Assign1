@@ -9,6 +9,8 @@
 <PageTitle>Car Rental Assignment - G</PageTitle>
 <h1>Car Rental Assignment - G</h1>
 <h4>Cars</h4>
+
+<div style=@bp.LockTable>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -18,10 +20,79 @@
             <th class="bg-black text-light">Cost Km</th>
             <th class="bg-black text-light">Vehicle Type</th>
             <th class="bg-black text-light">Cost Day</th>
-            <th class="bg-black text-light">Status</th>
+            <th class="bg-black text-light">Action</th>
+            <th class="bg-black text-light">Status</th>     
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td>
+                <div class="input-group mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="floatingInputGroup1" id="floatingInputGroup1" placeholder="RegNo" @bind="bp.input1">
+                        <label for="floatingInputGroup1">RegNo</label>
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                <div class="input-group mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="floatingInputGroup2" placeholder="Make" @bind="bp.input2">
+                        <label for="floatingInputGroup2">Make</label>
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                <div class="input-group mb-3 d-print-inline-grid">
+                    <div class="form-floating input-">
+                        <input type="text" class="form-control" id="floatingInputGroup3" placeholder="Odometer" @bind="bp.input4">
+                        <label for="floatingInputGroup3">Odometer</label>
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                <div class="input-group mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="floatingInputGroup4" id="floatingInputGroup4" placeholder="Cost Km" @bind="bp.input5">
+                        <label for="floatingInputGroup1">CostKm</label>
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                <InputSelect @bind-Value="@bp.input6">
+                    @foreach(VehicleType type in Enum.GetValues(typeof(VehicleType)))
+                    {
+                        <option value="@type">@type</option>
+                    }
+                </InputSelect>
+            </td>
+
+            <td>
+                <div class="input-group mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="floatingInputGroup5" id="floatingInputGroup6" placeholder="Cost Day" @bind="bp.input7">
+                        <label for="floatingInputGroup1">CostDay</label>
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                <div>
+                    <button class="btn btn-success" @onclick="(() => bp.VehicleButton())">Add</button> 
+                </div>
+                   
+            </td>
+
+            @if (bp.IsTableLocked)
+            {
+               <td><div class="badge bg-warning text-wrap" style="width: 6rem">Process</div></td>
+            }
+                
+        </tr>
         @foreach (var car in bp.GetVehicles())
         {
             <tr>
@@ -31,7 +102,32 @@
                 <td>@car.CostKm</td>
                 <td>@car.VehicleType</td>
                 <td>@car.CostDay</td>
-                @if (car.VehicleStatus.Equals(VehicleStatus.Available) || car.VehicleStatus.Equals(VehicleStatus.Closed))
+                @if (car.VehicleStatus.Equals(VehicleStatus.Available))
+                {
+                    <td>
+                        <select @bind="@bp.CustomerId">
+                            @foreach (Customer type in bp.GetCustomers())
+                            {
+                                <option value="@type.Id">@type.GetName()</option>
+                                
+                            }
+                        </select>
+                        <button class="btn btn-outline-primary" @onclick="(() => bp.RentButton(car.Id, bp.CustomerId))">Rent</button>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <div class="input-group mb-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="floatingInputGroup5" id="floatingInputGroup6" placeholder="KmReturn" @bind="bp.distance">
+                                <label for="floatingInputGroup1">KmReturn</label>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-success" @onclick="(() => bp.RenturnButton(car.Id, bp.CustomerId, bp.distance))">Return</button>
+                    </td>
+                }
+                @if (car.VehicleStatus.Equals(VehicleStatus.Available) || car.VehicleStatus.Equals(BookingStatus.Closed))
                 {
                     <td><div class="badge bg-success text-wrap" style="width: 6rem">@car.VehicleStatus</div></td>
                 }
@@ -43,6 +139,7 @@
         }
     </tbody>
 </table>
+</div>
 
 <h4>Bookings</h4>
 <table class="table table-bordered">
@@ -77,19 +174,19 @@
                 <td>@book.Returned</td>
                 @if (book.Cost == 0)
                 {
-                    <td>@book.Kmreturned.ToString(" ")</td>
+                    <td>@string.Empty</td>
                 }
                 else
                 {
                     <td>@book.Cost</td>
                 }
-                @if (book.VehicleStatus.Equals(VehicleStatus.Available) || book.VehicleStatus.Equals(VehicleStatus.Closed))
+                @if (book.BookingStatus.Equals(VehicleStatus.Available) || book.BookingStatus.Equals(BookingStatus.Closed))
                 {
-                    <td><div class="badge bg-success text-wrap" style="width: 6rem">@book.VehicleStatus</div></td>
+                    <td><div class="badge bg-success text-wrap" style="width: 6rem">@book.BookingStatus</div></td>
                 }
                 else
                 {
-                    <td><div class="badge bg-danger text-wrap" style="width: 6rem">@book.VehicleStatus</div></td>
+                    <td><div class="badge bg-danger text-wrap" style="width: 6rem">@book.BookingStatus</div></td>
                 }
             </tr>
         }
@@ -103,9 +200,44 @@
             <th class="bg-black text-light">First name</th>
             <th class="bg-black text-light">Last name</th>
             <th class="bg-black text-light">Ssn</th>
+            <th class="bg-black text-light"></th>
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td>
+                <div class="input-group mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="floatingInputGroup1" id="floatingInputGroup1" placeholder="FirstName" @bind="bp.input1">
+                        <label for="floatingInputGroup1">First Name</label>
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                <div class="input-group mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="floatingInputGroup2" placeholder="LastName" @bind="bp.input2">
+                        <label for="floatingInputGroup2">Last Name</label>
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                <div class="input-group mb-3 d-print-inline-grid">
+                    <div class="form-floating input-">
+                        <input type="text" class="form-control" id="floatingInputGroup3" placeholder="Ssn" @bind="bp.input3">
+                        <label for="floatingInputGroup3">Ssn</label>
+                    </div>
+                </div>
+            </td>
+            
+            <td>
+                <div>
+                    <button class="btn btn-success" @onclick="(() => bp.CustomerButton())">Add</button>
+                </div>
+            </td>
+        </tr>
         @foreach (var customer in bp.GetCustomers())
         {
             <tr>
